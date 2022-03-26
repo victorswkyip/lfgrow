@@ -7,15 +7,10 @@
 <span>description</span><br>
 <textarea [(ngModel)]="profileDescription" name="profileDescription" id="profileDescription" cols="30" rows="10"
     placeholder="optional"></textarea><br>
-<input #fileInput type="file" name="imageFileInput" id="imageFileInput"><br><br>
+<input #fileInput type="file" name="fileInput" id="fileInput"><br><br>
 <input type="checkbox" id="profileVisibility" name="profileVisibility" value="Private">
 <label for="profileVisibility"> I want to set a private account</label><br><br>
 <button (click)="submitProfileInput()">Submit Profile</button>
 
 <p>handle: {{profileHandle}}</p>
 <p>description: {{profileDescription}}</p>
-
-<script>
-
-
-</script>

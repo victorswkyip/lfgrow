@@ -10,10 +10,10 @@ export class MoralisService {
 
   constructor() { }
 
-  initialize(): void {
+  async initialize(): Promise<void> {
     const serverUrl = environment.MORALIS_SERVER_URL;
-    const appId = environment.MORALIS_APP_ID; 
-    Moralis.start({ serverUrl, appId })
+    const appId = environment.MORALIS_APP_ID;
+    await Moralis.start({ serverUrl, appId })
     console.log('moralis: started');
   }
 

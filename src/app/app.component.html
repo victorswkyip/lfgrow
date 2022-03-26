@@ -1,16 +1,12 @@
-<div *ngIf="!router.isActive('/scene')">
+<!-- <div *ngIf="!router.isActive('/scene')">
   <nav>
     <a routerLink="/scene">Scene</a><br>
-    <a routerLink="/create-profile">Create Profile</a>
-
+    <a routerLink="/create-profile">Create Profile</a><br>
+    <a routerLink="/select-profile">Select Profile</a>
   </nav>
-
-  <!-- <p>please login with metamask</p> -->
-  <!-- <button (click)="getProfile()"><span>login</span></button> -->
-  <!-- <nav><a routerLink="/scene"><button (click)="handleClickLogin()"><span>login</span></button></a></nav> -->
-
-
-  
-</div>
+</div> -->
+<!-- <p>please login with metamask</p> -->
+<!-- <button (click)="getProfile()"><span>login</span></button> -->
+<app-navigation></app-navigation>
 
 <router-outlet></router-outlet>

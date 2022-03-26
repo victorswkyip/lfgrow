@@ -2,22 +2,11 @@
 
   <!--  preload scene assets-->
   <a-assets>
-    <a-mixin id="frame" geometry="primitive: plane; width: 0.5783552; height: 0.8192"
-      material="color: white; shader: flat"
-      animation__scale="property: scale; to: 1.2 1.2 1.2; dur: 200; startEvents: mouseenter"
-      animation__scale_reverse="property: scale; to: 1 1 1; dur: 200; startEvents: mouseleave"></a-mixin>
-    <a-mixin id="poster" geometry="primitive: plane; width: 0.544768; height: 0.786432"
-      material="color: white; shader: flat" material="shader: flat" position="0 0 0.005"></a-mixin>
-
-    <a-asset-item id="avatar" response-type="arraybuffer" src="../../assets/3d/bird.glb"></a-asset-item> <!--token uri goes into this source-->
-
+<!-- Todo: dynamically load other player image uri  -->
   </a-assets>
+ 
   <!-- Valid preset values: none, default, contact, egypt, checkerboard, forest, goaland, yavapai, goldmine, threetowers, poison, arches, tron, japan, dream, volcano, starry, osiris -->
-
-  <!--  render sky and floor -->
-  <a-sky environment="preset:threetowers"></a-sky>
-  <!-- <a-plane position=" 0 0 -4" rotation="-90 0 0" width="499" height="499" color="#7BC8A4">
-    </a-plane> -->
+  <a-sky environment="preset:threetowers"></a-sky> 
 
   <!--  camera rig   -->
   <a-camera #camera>
@@ -27,19 +16,33 @@
     </a-entity>
   </a-camera>
 
-  <!--  player "Avatars"  -->
-  <!-- <a-entity geometry="primitive: box" id="{{user.id}}" *ngFor="let user of users" #player></a-entity> -->
-  <a-gltf-model src="#avatar" scale="0.005 0.005 0.005" id="{{user.id}}" *ngFor="let user of users" #player></a-gltf-model>
-
   <!-- microphone input controller -->
-  <a-torus id="leave-btn" (click)="leaveVoice()" position="-1 1 -3" rotation="0 30 0" radius="0.75" height="2" color="#4CC3D9"></a-torus>
-  <a-torus id="join-btn" (click)="joinVoice()" position="1 1 -3" rotation="0 150 0" radius="0.75" height="2" color="#EF2D5E"></a-torus>
-  <a-torus id="mic-btn" (click)="muteInput()" position="0 1 -4.75" rotation="0 90 0" radius="0.75" height="2" color="#FFC65D">  </a-torus>
+  <a-torus id="leave-btn" (click)="leaveVoice()" position="-1 30 -3" rotation="0 30 0" radius="0.75" height="2"
+    color="#4CC3D9"></a-torus>
+  <a-torus id="join-btn" (click)="joinVoice()" position="1 30 -3" rotation="0 150 0" radius="0.75" height="2"
+    color="#EF2D5E"></a-torus>
+  <a-torus id="mic-btn" (click)="muteInput()" position="0 30 -4.75" rotation="0 90 0" radius="0.75" height="2"
+    color="#FFC65D"> </a-torus>
 
-  <!--  Render assets  -->
+  <!--  players  -->
+  <a-entity geometry="primitive: box" id="{{user.id}}" *ngFor="let user of users" #player></a-entity>
+  <!-- <a-entity id="{{user.id}}" *ngFor="let user of users" #player>
+    <a-gltf-model src="#avatar" rotation="0 90 0"  scale="0.005 0.005 0.005" animation-mixer="clip:Take 001; crossFadeDuration: 1">  
+    </a-gltf-model>
+  </a-entity> -->   
 
-  <!-- <a-gltf-model src="#bird" scale="0.01 0.01 0.01"
-    animation-mixer="clip:Take 001; crossFadeDuration: 1"></a-gltf-model> -->
+  <!--  portals  -->
+  <a-sphere scale="2 3 1"></a-sphere>
 
-  <!-- <a-gltf-model src="#bird" scale="0.005 0.005 0.005"></a-gltf-model> -->
+
+
+
+
+
+ 
 </a-scene>
+
+<!-- TODO: copy and paste a multiplayer scene where there are portals on the floor that render recommended profiles-->
+<!-- TODO: implement a body collision with portal to enter a video scene that renders livepeer video -->
+<!-- TODO: update lens protocol to allow for publications in the form of livepeer -->
+<!-- TODO: portals should have a mouse enter function that allows you to view popup and follow the creator -->

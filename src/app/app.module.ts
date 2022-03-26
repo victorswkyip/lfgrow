@@ -8,12 +8,16 @@ import { WebSocketService } from './services/web-socket.service';
 import { ApolloClientService } from './services/lens-api/apollo-client.service';
 import { ProfileCreationComponent } from './profile-creation/profile-creation.component';
 import { FormsModule } from '@angular/forms';
+import { ProfileSelectionComponent } from './profile-selection/profile-selection.component';
+import { NavigationComponent } from './navigation/navigation.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EngineComponent,
     ProfileCreationComponent,
+    ProfileSelectionComponent,
+    NavigationComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [

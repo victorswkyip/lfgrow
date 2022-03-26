@@ -10,6 +10,7 @@ import { AgoraRtcService } from '../services/agora-rtc.service';
 })
 export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private agoraRtcService: AgoraRtcService, private webSocketService: WebSocketService) { }     // connect to the user service API and subscribe to server heartbeat
+  // constructor(private webSocketService: WebSocketService) { }     // connect to the user service API and subscribe to server heartbeat
 
   // template references 
   // @ViewChild('scene', { static: false }) scene: ElementRef;
@@ -65,7 +66,7 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
       this.webSocketService.sendState(this.pov);
       subA.unsubscribe();
 
-      // TODO: we should handle the defining of agoraid here
+      // TODO: we should handle the defining of audioid here
 
     });
 
@@ -103,6 +104,21 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
     this.webSocketService.sendState(this.pov); //put this here instead of at the host listener callback
+    // this.updateMirror();
+  }
+
+  updateMirror(): void {
+
+    let mirrorEl = new ElementRef(document.getElementById('mirror')).nativeElement;
+
+    if (mirrorEl.getAttribute('odd') == 'true') {
+      mirrorEl.setAttribute('rotation', "0 180 180");
+      mirrorEl.setAttribute('odd', 'false');
+    }
+    else {
+      mirrorEl.setAttribute('odd', 'true');
+      mirrorEl.setAttribute('rotation', "0 180 0");
+    }
   }
 
   updateUser(userElement, worldUser): void {
@@ -206,6 +222,7 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
 
 // consider the design for the game
 // environment design
+
 // first add a portal by working with the html file in the scene tag
 // then work by trying to dynamically loading world interactives (like the portal) upon scene load
 // work on the second scene to dynamically load some things cool
@@ -213,5 +230,11 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
 
 // avatars
 // add aframe-entiy and add aframe-asset html tags for future child binding of avatar models
+// pull an avatar source from lens protocol profile image uri
+// 
 
 
+// spatial audio
+// create voice controller ui
+// calculate gain and pan wrt two normal unit vectors
+// filter volume accordingly

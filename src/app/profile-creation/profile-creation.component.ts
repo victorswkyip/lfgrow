@@ -22,7 +22,7 @@ export class ProfileCreationComponent implements AfterViewInit {
   fileInput: any;
 
   ngAfterViewInit(): void {
-    const fileInput = document.getElementById("imageFileInput");
+    const fileInput = document.getElementById("fileInput");
     this.fileInput = fileInput;
   }
 
@@ -42,6 +42,17 @@ export class ProfileCreationComponent implements AfterViewInit {
       "name": name,
       "description": description,
       "image": imageURL,
+      "animation_url": imageURL,
+      // "attributes": [
+      //   {
+      //     "trait_type": "type",
+      //     "value": "value"
+      //   },
+      //   {
+      //     "trait_type": "type2",
+      //     "value": "value2"
+      //   },
+      // ]
     }
     const file = new Moralis.File("file.json", { base64: btoa(JSON.stringify(metadata)) });
     await file.saveIPFS();
@@ -67,6 +78,7 @@ export class ProfileCreationComponent implements AfterViewInit {
     };
     // console.log(inputStruct);
     await mockCreateProfile.connect(getSigner()).proxyCreateProfile(inputStruct).then(() => {
+
       window.location.reload();
     });
   }

@@ -2,6 +2,7 @@
 
 import { Injectable } from '@angular/core';
 import AgoraRTC from 'agora-rtc-sdk-ng';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +11,9 @@ export class AgoraRtcService {
 
   constructor() { }
 
-  APP_ID: any = "383d84e52975434d9b89329118caf7a3";
-  TOKEN: any = "006383d84e52975434d9b89329118caf7a3IACXNT3WWi8WAuJtp9tucEUN/MfM0TKGh0uN/S3VIxM3RGTNKL8AAAAAEACNSCPiGr43YgEAAQAavjdi";
-  CHANNEL: any = "main";
+  APP_ID: any = environment.AGORA_APP_ID;
+  TOKEN: any = environment.AGORA_TOKEN; 
+  CHANNEL: any = environment.AGORA_CHANNEL_NAME;
 
   client: any = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
 
