@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Moralis } from 'moralis/dist/moralis.min.js';
 import { mockCreateProfile } from '../lenshub';
 import { getAddressFromSigner, getSigner } from '../services/lens-api/ethers.service';
@@ -12,7 +13,7 @@ import { CreateProfileDataStruct } from '../services/lens-api/typechain-types/Le
 })
 export class ProfileCreationComponent implements AfterViewInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
   ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
   profileHandle: string;
   profileDescription: string;
@@ -79,7 +80,11 @@ export class ProfileCreationComponent implements AfterViewInit {
     // console.log(inputStruct);
     await mockCreateProfile.connect(getSigner()).proxyCreateProfile(inputStruct).then(() => {
 
-      window.location.reload();
+      this.router.navigate(["select-profile"]).then(() => {
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000)
+      });
     });
   }
 

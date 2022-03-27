@@ -2,14 +2,17 @@ import { Component, OnInit, AfterViewInit, ViewChild, ViewChildren, ElementRef, 
 import { Pov } from '../pov';
 import { WebSocketService } from '../services/web-socket.service';
 import { AgoraRtcService } from '../services/agora-rtc.service';
-
+import { recommendedProfiles } from '../services/lens-api/get-recommended-profiles.service';
+import { followers } from '../services/lens-api/followers.service';
+import { Router } from '@angular/router';
+import { profiles } from '../services/lens-api/get-profiles.service';
 @Component({
   selector: 'app-engine',
   templateUrl: './engine.component.html',
   styleUrls: ['./engine.component.css']
 })
 export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
-  constructor(private agoraRtcService: AgoraRtcService, private webSocketService: WebSocketService) { }     // connect to the user service API and subscribe to server heartbeat
+  constructor(private router: Router, private webSocketService: WebSocketService, private agoraRtcService: AgoraRtcService) { }     // connect to the user service API and subscribe to server heartbeat
   // constructor(private webSocketService: WebSocketService) { }     // connect to the user service API and subscribe to server heartbeat
 
   // template references 
@@ -42,11 +45,39 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
     // this.subscriptions.forEach(subscription => subscription.unsubscribe)
   }
 
+  // for demo we are assuming that there is only 1 profile in a wallet, and if there is, then enter vr automatically
+  // todo: support multiple profiles in a wallet - index profile_avatars_src to load other profile avatars owned
+
   ngOnInit(): void {
-    // connect to multiplayer server
+    profiles().then((response) => {
+      let ownedProfiles = response.profiles.items;
+      ownedProfiles.forEach(profile => { //iterate through each profile
+        try {
+          let hasAvatar = profile.picture.original.url; //get the avatar uri
+
+          fetch(hasAvatar).then(response => { // get the image url 
+            response.json().then(data => {
+              // this.profile_avatars_src.push(data.image);
+              let assetsElement = new ElementRef(document.getElementById('assets')); //inject source into aframe
+              assetsElement.nativeElement.innerHTML = `<a-asset-item id="avatar" src="${data.image}" response-type="arraybuffer" ></a-asset-item>`;
+
+              let avatarElement = new ElementRef(document.getElementById('avatar-container'));
+              avatarElement.nativeElement.innerHTML = `<a-gltf-model src="#avatar" position="0 0 0" rotation="0 90 0" scale="0.005 0.005 0.005" animation-mixer="clip:Take 001; crossFadeDuration: 1"></a-gltf-model>`;
+            });
+          }).catch(err => {
+            console.log('display image/avatar metadata not fetchable');
+          })
+
+        } catch (error) {  //the current iteration of profile doesnt have an imageuri
+          // this.profile_avatars_src.push(this.blank);
+        }
+      });
+    });
+    recommendedProfiles();
+    followers();
+    // connect to multiplayer server 
     this.webSocketService.connect();
   }
-
   // nativeElement only accessible in ngAfterViewInit
   ngAfterViewInit(): void {
     // this.sceneElement = this.scene.nativeElement;
@@ -104,21 +135,6 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
     this.webSocketService.sendState(this.pov); //put this here instead of at the host listener callback
-    // this.updateMirror();
-  }
-
-  updateMirror(): void {
-
-    let mirrorEl = new ElementRef(document.getElementById('mirror')).nativeElement;
-
-    if (mirrorEl.getAttribute('odd') == 'true') {
-      mirrorEl.setAttribute('rotation', "0 180 180");
-      mirrorEl.setAttribute('odd', 'false');
-    }
-    else {
-      mirrorEl.setAttribute('odd', 'true');
-      mirrorEl.setAttribute('rotation', "0 180 0");
-    }
   }
 
   updateUser(userElement, worldUser): void {
@@ -168,12 +184,14 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
     return text;
   }
 
+
+
   joinVoice(): void {
     this.agoraRtcService.joinStream();
     let joinbtn = new ElementRef(document.getElementById('join-btn')).nativeElement;
     joinbtn.setAttribute('position', "0 -30 0");
     let leavebtn = new ElementRef(document.getElementById('leave-btn')).nativeElement;
-    leavebtn.setAttribute('position', "-1 1 -3");
+    leavebtn.setAttribute('position', "-15 1 0");
   }
 
 
@@ -182,27 +200,25 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
     let leavebtn = new ElementRef(document.getElementById('leave-btn')).nativeElement;
     leavebtn.setAttribute('position', "0 -30 0");
     let joinbtn = new ElementRef(document.getElementById('join-btn')).nativeElement;
-    joinbtn.setAttribute('position', "1 1 -3");
+    joinbtn.setAttribute('position', "-15 3 0");
   }
 
 
   muteInput(): void {
-    this.agoraRtcService.toggleMic(); 
+    this.agoraRtcService.toggleMic();
     // console.log('mictoggled'); 
     let micbtn = new ElementRef(document.getElementById('mic-btn')).nativeElement;
 
     if (micbtn.getAttribute('muted') == 'true') {
-      micbtn.setAttribute('rotation', "0 90 0");
+      micbtn.children[0].setAttribute('value', "Mute Mic.");
       micbtn.setAttribute('muted', 'false');
     }
     else {
+      micbtn.children[0].setAttribute('value', "Unmute Mic.");
       micbtn.setAttribute('muted', 'true');
-      micbtn.setAttribute('rotation', "0 0 0");
 
     }
   }
-
-
 
 
 }

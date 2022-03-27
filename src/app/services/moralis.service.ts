@@ -23,5 +23,6 @@ export class MoralisService {
       // console.log(user.get('ethAddress'));
       console.log('moralis: authenticated');
     })
+
   }
 } 

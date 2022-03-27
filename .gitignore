@@ -1,3 +1,4 @@
 node_modules
 livepeer
 src/environments/environment.ts
+src/assets/video-examples
