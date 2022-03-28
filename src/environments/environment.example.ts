@@ -17,6 +17,8 @@ export const environment = {
   LENS_API: 'https://api-mumbai.lens.dev/',
   LENS_HUB_CONTRACT: '0xd7B3481De00995046C7850bCe9a5196B7605c367',
   MOCK_PROFILE_CREATION_CONTRACT: '0x9BB48d8F9c4596b98C8bB1fB6D67aaE238F81CC2',
+  LIVEPEER_API_KEY: 'enter your own LIVEPEER_API_KEY'
+
 };
 
 /*

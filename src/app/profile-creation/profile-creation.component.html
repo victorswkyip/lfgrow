@@ -3,7 +3,7 @@
 <!-- User has logged in, they have no profiles to their wallet, they are shown this -->
 
 <span>handle</span><br>
-<input [(ngModel)]="profileHandle" type="text" name="profileHandle" id="profileHandle" placeholder="required"><br><br>  
+<input [(ngModel)]="profileHandle" type="text" name="profileHandle" id="profileHandle" placeholder="required"><br><br>
 <span>description</span><br>
 <textarea [(ngModel)]="profileDescription" name="profileDescription" id="profileDescription" cols="30" rows="10"
     placeholder="optional"></textarea><br>
@@ -14,3 +14,13 @@
 
 <p>handle: {{profileHandle}}</p>
 <p>description: {{profileDescription}}</p>
+
+
+
+<!-- <div>
+
+    <input #uploadStory type="file" name="uploadStory" id="uploadStory"><br><br>
+    <label for="postVisibility"> I want to a post privately</label><br><br>
+    <button (click)="submitPostInput()">Submit Post</button>
+
+</div> -->

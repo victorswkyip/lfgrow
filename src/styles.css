@@ -1,4 +1,4 @@
-/* You can add global styles to this file, and also import other style files */ 
+/* You can add global styles to this file, and also import other style files */
 /* Toggle this class when clicking on the popup container (hide and show the popup) */
 .show {
     visibility: visible;
@@ -26,4 +26,17 @@
         opacity: 1;
     }
 }
- 
+
+
+
+
+.a-enter-ar, .a-enter-vr {
+    font-family: sans-serif, monospace;
+    font-size: 13px;
+    width: 100%;
+    font-weight: 200;
+    line-height: 16px;
+    position: absolute;
+    right: 20px;
+    bottom: 20px
+}

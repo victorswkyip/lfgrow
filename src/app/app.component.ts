@@ -18,15 +18,15 @@ export class AppComponent implements OnInit {
     // this.moralisService.initialize().then(() => {
     //   this.moralisService.login();
     // })
-    profiles().then(response => {
-      if (response.profiles.pageInfo.totalCount === 0) {
-        console.log('wallet has no user profiles. let us create one.');
-        this.router.navigate(["create-profile"]);
-      }
-      else {
-        this.router.navigate(["scene"]);
-      } 
-    });
+    // profiles().then(response => {
+    //   if (response.profiles.pageInfo.totalCount === 0) {
+    //     console.log('wallet has no user profiles. let us create one.');
+    //     this.router.navigate(["create-profile"]);
+    //   }
+    //   else {
+    //     this.router.navigate(["scene"]);
+    //   } 
+    // });
 
   }  
 }

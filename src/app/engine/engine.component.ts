@@ -6,6 +6,9 @@ import { recommendedProfiles } from '../services/lens-api/get-recommended-profil
 import { followers } from '../services/lens-api/followers.service';
 import { Router } from '@angular/router';
 import { profiles } from '../services/lens-api/get-profiles.service';
+import Moralis from 'moralis/dist/moralis.min.js';
+import { createPost } from '../services/lens-api/post.service';
+
 @Component({
   selector: 'app-engine',
   templateUrl: './engine.component.html',
@@ -19,6 +22,7 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
   // @ViewChild('scene', { static: false }) scene: ElementRef;
   @ViewChild('camera', { static: false }) camera: ElementRef;
   @ViewChildren('player') players: QueryList<ElementRef>
+  @ViewChild('initSky', { static: false }) initSky: ElementRef;
 
   // Listen to DOM changes from mouse and keyboard events from Angular's HostListener decorator
   @HostListener('document:keydown', ['$event']) handleKeypressDownEvent(event: KeyboardEvent) {
@@ -39,6 +43,8 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
   // private sceneElement: any;
   private cameraElement: any;
   private users: any = [];
+
+  storyFile: any;
 
   ngOnDestroy(): void {
     // note: can't unsubscribe from B or C for when player closes tab, for completeness 
@@ -80,6 +86,9 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   // nativeElement only accessible in ngAfterViewInit
   ngAfterViewInit(): void {
+
+
+
     // this.sceneElement = this.scene.nativeElement;
     this.cameraElement = this.camera.nativeElement; // #player
 
@@ -184,8 +193,6 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
     return text;
   }
 
-
-
   joinVoice(): void {
     this.agoraRtcService.joinStream();
     let joinbtn = new ElementRef(document.getElementById('join-btn')).nativeElement;
@@ -194,7 +201,6 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
     leavebtn.setAttribute('position', "-15 1 0");
   }
 
-
   leaveVoice(): void {
     this.agoraRtcService.leaveAndRemoveLocalStream();
     let leavebtn = new ElementRef(document.getElementById('leave-btn')).nativeElement;
@@ -202,7 +208,6 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
     let joinbtn = new ElementRef(document.getElementById('join-btn')).nativeElement;
     joinbtn.setAttribute('position', "-15 3 0");
   }
-
 
   muteInput(): void {
     this.agoraRtcService.toggleMic();
@@ -220,6 +225,83 @@ export class EngineComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  async showUploadUI(): Promise<void> {
+    var el = new ElementRef(document.getElementsByClassName("a-enter-vr")).nativeElement;
+    // el.item(0).innerHTML = `<app-upload-story></app-upload-story>`
+    el.item(0).innerHTML = `<div><button (click)="submitPostInput()">Submit Post</button><input #uploadStory type="file" name="storyFile" id="storyFile"> <br></div> `
+
+    // el3.classList.toggle('show');
+    // Save file input to IPFS
+    const storyFile = document.getElementById("storyFile");
+    this.storyFile = storyFile;
+    console.log('code wont reach the next point to upload submissiom. angular need to render the function calls on compile, so either go lower level to index.html to make function calls or consider viewcontainerref')
+
+  }
+
+  async uploadStory(): Promise<void> {
+    console.log('we here');
+    const data = this.storyFile.files[0]
+    const file = new Moralis.File(data.name, data)
+    await file.saveIPFS();
+    console.log(file.ipfs(), file.hash());
+    return file.ipfs();
+
+
+  }
+
+  getStoryContentURI = async (contentURL) => {
+    const metadata = {
+      "name": 'name',
+      "description": 'description',
+      "image": 'imageURL',
+      "animation_url": contentURL,
+      // "attributes": [
+      //   {
+      //     "trait_type": "type",
+      //     "value": "value"
+      //   },
+      //   {
+      //     "trait_type": "type2",
+      //     "value": "value2"
+      //   },
+      // ]
+    }
+    const file = new Moralis.File("file.json", { base64: btoa(JSON.stringify(metadata)) });
+    await file.saveIPFS();
+    console.log(file.ipfs(), file.hash());
+    return file.ipfs();
+  }
+
+  // TODO: fix flaw where if it ends up failing the contract tx to create profile, then we wasted resources uploading to ipfs
+  submitPostInput = async () => {
+    const content = await this.uploadStory();
+    const contentURI = await this.getStoryContentURI(content);
+    console.log(await createPost(contentURI));
+  }
+
+
+  playVideo() {
+    console.log('it should play video');
+    //change sky to video src specific to that portal
+    // this.initSky.nativeElement.setAttribute('environment', null);
+    // this.initSky.nativeElement.setAttribute('src', `#video1`);
+    
+    // = `<a-sky src=#video1></a-sky>`;
+
+
+
+    let videoElement = new ElementRef(document.getElementById('video-container')); //inject source into aframe
+    // videoElement.nativeElement.innerHTML = `<a-videosphere id="video" src="#video1" ></a-videosphere>`;
+    videoElement.nativeElement.innerHTML = `<a-sky src=#video1></a-sky>`;
+    // document.querySelector("#video1").components.material.material.map.image.play();
+
+
+    let ui = new ElementRef(document.getElementById('ui-container')).nativeElement;
+    ui.setAttribute('visible', 'false');
+
+
+    //
+  }
 
 }
 

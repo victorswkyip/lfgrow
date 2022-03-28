@@ -1,3 +1,11 @@
+<!-- <div class="upload"> 
+
+  <input #uploadStory type="file" name="storyFile" id="uploadStory"><br><br>
+  <label for="postVisibility"> I want to a post privately</label><br><br>
+  <button (click)="submitPostInput()">Submit Post</button>
+ 
+</div> -->
+
 <a-scene #scene raycaster="objects: .raycastable" reflection>
   <a-assets id="assets"></a-assets>
   <!--  preload scene assets-->
@@ -7,28 +15,33 @@
     <!-- Todo: dynamically load other player image uri  -->
     <a-image id="grass" src="../../assets/textures/grass.jpg"></a-image>
     <a-image id="logo" src="../../assets/jacker/Logo_B.png"></a-image>
-    <video autoplay id="video1"
+
+    <video id="video1" autoplay
       src="../../assets/video-examples/Aurora Borealis over Kashwitna Lake, Alaska .mp4"></video>
-    <!-- <a-video id="video2" src="../../assets/video-examples/Antarctic_Boat.mp4"></a-video>
-    <a-video id="video3" src="../../assets/video-examples/Antarctica_Penguin.mp4"></a-video>
-    <a-video id="video4" src="../../assets/video-examples/Hawaii - The Pace of Formation.mp4"></a-video>
-    <a-video id="video5" src="../../assets/video-examples/Antarctic_Field.mp4">
-     </a-video> -->
-    <video autoplay="false" id="video6"
-      src="../../assets/video-examples/Travel Cuba in 360 degrees VR - Episode 2׃ Havana [Quad HD 1440p].mp4"></video>
-    <!-- <a-video id="video7" src="../../assets/video-examples/Malaekahana Sunrise .mp4"></a-video>
-    <a-video id="video8"
-      src="../../assets/video-examples/Travel Cuba in 360 degrees VR - Episode 3׃ Camagüey [Quad HD 1440p].mp4">
-    </a-video>
-    <a-video id="video9" src="../../assets/video-examples/Tour a $16 Million Irish Castle in 360 [Ultra HD 2160p].mp4">
-    </a-video>
-    <a-video id="video10"
-      src="../../assets/video-examples/360° cockpit view  SWISS Airbus A320  Geneva – Zurich [Ultra HD 2160p].mp4">
-    </a-video> -->
+    <!-- <video id="video2" src="../../assets/video-examples/Antarctic_Boat.mp4"></video>
+    <video id="video3"
+      src="../../assets/video-examples/Virtual Nature 360° - Mountain Stillness Relaxation for Gear VR [Quad HD 1440p].mp4"></video>
+    <video id="video4" src="../../assets/video-examples/Hawaii - The Pace of Formation.mp4"></video>
+    <video id="video5"
+      src="../../assets/video-examples/Ireland VR - Pure Nature VR Experience [Ultra HD 2160p].mp4"></video>
+    <video id="video6"
+      src="../../assets/video-examples/Tour a $16 Million Irish Castle in 360 [Ultra HD 2160p].mp4"></video>
+    <video id="video7" src="../../assets/video-examples/Malaekahana Sunrise .mp4"></video>deo id="video2" src="../../assets/video-examples/Antarctic_Boat.mp4"></video>
+    <video id="video3"
+      src="../../assets/video-examples/Virtual Nature 360° - Mountain Stillness Relaxation for Gear VR [Quad HD 1440p].mp4"></video>
+    <video id="video4" src="../../assets/video-examples/Hawaii - The Pace of Formation.mp4"></video>
+    <video id="video5"
+      src="../../assets/video-examples/Ireland VR - Pure Nature VR Experience [Ultra HD 2160p].mp4"></video>
+    <video id="video6"
+      src="../../assets/video-examples/Tour a $16 Million Irish Castle in 360 [Ultra HD 2160p].mp4"></video>
+    <video id="video7" src="../../assets/video-examples/Malaekahana Sunrise .mp4"></video> -->
   </a-assets>
 
   <!-- Valid preset values: none, default, contact, egypt, checkerboard, forest, goaland, yavapai, goldmine, threetowers, poison, arches, tron, japan, dream, volcano, starry, osiris -->
-  <a-sky environment="preset:threetowers"></a-sky>
+  <!-- <a-sky #initSky environment="preset:threetowers"></a-sky> -->
+  <a-entity id="video-container">
+    <a-sky color="#070B34"></a-sky>
+  </a-entity>
   <a-plane position="0 -1.5 -4" rotation="-90 0 0" width="199" height="199"
     material="color: #7BC8A4; shader: flat; src: #grass"></a-plane>
 
@@ -48,67 +61,88 @@
     </a-gltf-model>
   </a-entity> -->
 
+  <a-entity id="ui-container" visible="true">
+    <!--  mirror  -->
+    <a-entity id="mirror-ui">
+      <a-plane id="mirror" scale="2 3 1" position="0 1.5 -4" material="metalness: 1; roughness: 0" rotation="0 0 0"
+        camera-cube-env>
+      </a-plane>
+      <a-plane id="mirror" scale="2 3 1" position="-1.96 1.5 -3.74" material="metalness: 1; roughness: 0"
+        rotation="0 15 0" camera-cube-env>
+      </a-plane>
+      <a-plane id="mirror" scale="2 3 1" position="1.96 1.5 -3.74" material="metalness: 1; roughness: 0"
+        rotation="0 345 0" camera-cube-env>
+      </a-plane>
+    </a-entity>
 
-  <!--  mirror  -->
-  <a-entity>
-    <a-plane id="mirror" scale="2 3 1" position="0 1.5 -4" material="metalness: 1; roughness: 0" rotation="0 0 0"
-      camera-cube-env>
-    </a-plane>
-    <a-plane id="mirror" scale="2 3 1" position="-1.96 1.5 -3.74" material="metalness: 1; roughness: 0"
-      rotation="0 15 0" camera-cube-env>
-    </a-plane>
-    <a-plane id="mirror" scale="2 3 1" position="1.96 1.5 -3.74" material="metalness: 1; roughness: 0"
-      rotation="0 345 0" camera-cube-env>
-    </a-plane>
+    <!--  buttons ui   -->
+    <a-entity id="buttons-ui">
+      <a-plane material="shader: flat; src: #logo" position="-12 6 0" rotation="0 90 0" width="6.8" height="2.8">
+      </a-plane>
+      <a-entity geometry="primitive: plane; width:4" scale="2 .8 1" id="create" position="-12 4 0" rotation="0 90 0"
+        mixin="hover" (click)="showUploadUI()" type="file">
+        <a-text value="Upload Story!" position="-1 0 0" color="#000000" scale="1.5 3 1"> </a-text>
+      </a-entity>
+      <a-entity geometry="primitive: plane; width:4" scale="2 .8 1" id="join-btn" position="-12 3 0" rotation="0 90 0"
+        mixin="hover" (click)="joinVoice()">
+        <a-text value="Join Voice" position="-1 0 0" color="#EF2D5E" scale="1.5 3 1"> </a-text>
+      </a-entity>
+      <a-entity geometry="primitive: plane; width:4" scale="2 .8 1" id="mic-btn" position="-12 2 0" rotation="0 90 0"
+        mixin="hover" (click)="muteInput()">
+        <a-text value="Mute Mic." position="-1 0 0" color="#FFC65D" scale="1.5 3 1"> </a-text>
+      </a-entity>
+      <a-entity geometry="primitive: plane; width:4" scale="2 .8 1" id="leave-btn" position="0 -30 0" rotation="0 90 0"
+        mixin="hover" (click)="leaveVoice()">
+        <a-text value="Leave Voice" position="-1 0 0" color="#4CC3D9" scale="1.5 3 1"> </a-text>
+      </a-entity>
+    </a-entity>
+
+
+    <!--  portals  -->
+    <!-- todo: render entities dynamically for each story in feed, for each post with collection module that there is a 360 video  -->
+    <a-entity id="portals-ui">
+      <a-entity geometry="primitive: sphere" id="portal1" scale="2 3 1" position="0 1.5 -12" material="src: #video1"
+        (click)="playVideo()">
+      </a-entity>
+      <!-- <a-entity geometry="primitive: sphere" id="portal2" scale="2 3 1" position="0 1.5 12" rotation="0 180 0"
+        material="src: #video2">
+      </a-entity>
+      <a-entity geometry="primitive: sphere" id="portal3" scale="2 3 1" position="12 1.5 0" rotation="0 270 0"
+        material="src: #video3">
+      </a-entity>
+      <a-entity geometry="primitive: sphere" id="portal4" scale="2 3 1" position="8.33 1.5 -8.33" rotation="0 315 0"
+        material="src: #video4">
+      </a-entity>
+      <a-entity geometry="primitive: sphere" id="portal5" scale="2 3 1" position="8.33 1.5 8.33" rotation="0 225 0"
+        material="src: #video5">
+      </a-entity>
+      <a-entity geometry="primitive: sphere" id="portal6" scale="2 3 1" position="-8.33 1.5 8.33" rotation="0 135 0"
+        material="src: #video6">
+      </a-entity>
+      <a-entity geometry="primitive: sphere" id="portal7" scale="2 3 1" position="-8.33 1.5 -8.33" rotation="0 45 0"
+        material="src: #video7">
+      </a-entity> -->
+
+      <a-entity geometry="primitive: sphere" id="portal2" scale="2 3 1" position="0 1.5 12" rotation="0 180 0">
+      </a-entity>
+      <a-entity geometry="primitive: sphere" id="portal3" scale="2 3 1" position="12 1.5 0" rotation="0 270 0">
+      </a-entity>
+      <a-entity geometry="primitive: sphere" id="portal4" scale="2 3 1" position="8.33 1.5 -8.33" rotation="0 315 0">
+      </a-entity>
+      <a-entity geometry="primitive: sphere" id="portal5" scale="2 3 1" position="8.33 1.5 8.33" rotation="0 225 0">
+      </a-entity>
+      <a-entity geometry="primitive: sphere" id="portal6" scale="2 3 1" position="-8.33 1.5 8.33" rotation="0 135 0">
+      </a-entity>
+      <a-entity geometry="primitive: sphere" id="portal7" scale="2 3 1" position="-8.33 1.5 -8.33" rotation="0 45 0">
+      </a-entity>
+
+
+    </a-entity>
+
   </a-entity>
-
-
-  <!--  buttons ui   -->
-  <a-entity>
-    <a-plane material="shader: flat; src: #logo" position="-12 6 0" rotation="0 90 0" width="6.8" height="2.8">
-    </a-plane>
-    <a-entity geometry="primitive: plane; width:4" scale="2 .8 1" id="create" position="-12 4 0" rotation="0 90 0"
-      mixin="hover">
-      <a-text value="Upload Story!" position="-1 0 0" color="#000000" scale="1.5 3 1"> </a-text>
-    </a-entity>
-    <a-entity geometry="primitive: plane; width:4" scale="2 .8 1" id="join-btn" position="-12 3 0" rotation="0 90 0"
-      mixin="hover" (click)="joinVoice()">
-      <a-text value="Join Voice" position="-1 0 0" color="#EF2D5E" scale="1.5 3 1"> </a-text>
-    </a-entity>
-    <a-entity geometry="primitive: plane; width:4" scale="2 .8 1" id="mic-btn" position="-12 2 0" rotation="0 90 0"
-      mixin="hover" (click)="muteInput()">
-      <a-text value="Mute Mic." position="-1 0 0" color="#FFC65D" scale="1.5 3 1"> </a-text>
-    </a-entity>
-    <a-entity geometry="primitive: plane; width:4" scale="2 .8 1" id="leave-btn" position="0 -30 0" rotation="0 90 0"
-      mixin="hover" (click)="leaveVoice()">
-      <a-text value="Leave Voice" position="-1 0 0" color="#4CC3D9" scale="1.5 3 1"> </a-text>
-    </a-entity>
-  </a-entity>
-
-
-  <!--  portals  -->
-  <!-- todo: render entities dynamically for each story in feed, for each post with collection module that there is a 360 video  -->
-  <a-entity>
-    <a-entity geometry="primitive: sphere" id="portal1" muted scale="2 3 1" position="0 1.5 -12" material="src: #video1">
-    </a-entity>
-    <a-entity geometry="primitive: sphere" id="portal6" muted scale="2 3 1" position="0 1.5 12" material="src: #video6">
-    </a-entity>
-
-    <a-entity geometry="primitive: sphere" scale="2 3 1" position="12 1.5 0" rotation="0 270 0"> </a-entity>
-    <a-entity geometry="primitive: sphere" scale="2 3 1" position="8.33 1.5 -8.33" rotation="0 315 0"> </a-entity>
-    <a-entity geometry="primitive: sphere" scale="2 3 1" position="8.33 1.5 8.33" rotation="0 225 0"> </a-entity>
-    <a-entity geometry="primitive: sphere" scale="2 3 1" position="-8.33 1.5 8.33" rotation="0 135 0"> </a-entity>
-    <a-entity geometry="primitive: sphere" scale="2 3 1" position="-8.33 1.5 -8.33"  rotation="0 45 0"> </a-entity>
-  </a-entity>
-
-
-
-
-
 
 </a-scene>
 
-<!-- TODO: videoplaying scene -->
 <!-- TODO: generate video src uri by uploading 360 video file -->
 <!-- TODO: mutate query for createposttype on lens -->
 <!-- TODO: portal ui popup for content metadata-->

@@ -7,7 +7,7 @@ import { AgoraRtcService } from './services/agora-rtc.service';
 import { WebSocketService } from './services/web-socket.service';
 import { ApolloClientService } from './services/lens-api/apollo-client.service';
 import { ProfileCreationComponent } from './profile-creation/profile-creation.component';
-import { FormsModule } from '@angular/forms';  
+import { FormsModule } from '@angular/forms'; 
 
 @NgModule({
   declarations: [
